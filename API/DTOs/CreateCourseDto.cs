@@ -4,6 +4,7 @@ namespace API.DTOs;
 
 public class CreateCourseDto
 {
+
    [Required, MaxLength(150)]    
    public string Title{get; set;}=string.Empty;
 
