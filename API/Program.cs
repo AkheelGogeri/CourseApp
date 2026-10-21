@@ -14,6 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 });
 
 builder.Services.AddOpenApi();
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -23,6 +24,12 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();               // serves the doc at /openapi/v1.json
     app.MapScalarApiReference();    // serves the UI at /scalar
 }
+
+app.UseCors(policy => policy
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .WithOrigins("http://localhost:4200", "https://localhost:4200"));
+    
 app.MapControllers();
 
 app.Run();
