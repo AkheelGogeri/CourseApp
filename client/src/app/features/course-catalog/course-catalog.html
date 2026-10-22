@@ -1,10 +1,19 @@
 <h2>Course Catalog</h2>
 
+@if (!userService.currentUser()) {
+  <p class="hint">Select a user in the navbar to enroll.</p>
+}
+
+@if (message()) {
+  <p class="message">{{ message() }}</p>
+}
+
 @for (course of courses(); track course.id) {
-  <div>
+  <div class="card">
     <h3>{{ course.title }}</h3>
     <p>{{ course.description }}</p>
     <p>{{ course.category }} · {{ course.durationHours }} hrs</p>
+    <button (click)="enroll(course)" [disabled]="!userService.currentUser()">Enroll</button>
   </div>
 } @empty {
   <p>No courses available.</p>
