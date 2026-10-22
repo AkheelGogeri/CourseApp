@@ -1,13 +1,10 @@
-<h1>{{ title() }}</h1>
+<nav>
+  <strong>{{ title() }}</strong>
+  <a routerLink="/courses" routerLinkActive="active">Courses</a>
+  <a routerLink="/register" routerLinkActive="active">Register</a>
+  <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+</nav>
 
-<h2>Course Catalog</h2>
-
-@for (course of courses(); track course.id) {
-  <div>
-    <h3>{{ course.title }}</h3>
-    <p>{{ course.description }}</p>
-    <p>{{ course.category }} · {{ course.durationHours }} hrs</p>
-  </div>
-} @empty {
-  <p>No courses available.</p>
-}
+<main>
+  <router-outlet />
+</main>

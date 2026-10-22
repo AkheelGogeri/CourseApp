@@ -1,0 +1,11 @@
+<h2>Course Catalog</h2>
+
+@for (course of courses(); track course.id) {
+  <div>
+    <h3>{{ course.title }}</h3>
+    <p>{{ course.description }}</p>
+    <p>{{ course.category }} · {{ course.durationHours }} hrs</p>
+  </div>
+} @empty {
+  <p>No courses available.</p>
+}
