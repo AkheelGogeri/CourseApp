@@ -1,20 +1,23 @@
 <h2>Course Catalog</h2>
 
 @if (!userService.currentUser()) {
-  <p class="hint">Select a user in the navbar to enroll.</p>
+  <p class="muted">Select a user in the navbar to enroll.</p>
 }
 
 @if (message()) {
-  <p class="message">{{ message() }}</p>
+  <p class="message" [class.warn]="message().startsWith('⚠️')">{{ message() }}</p>
 }
 
-@for (course of courses(); track course.id) {
-  <div class="card">
-    <h3>{{ course.title }}</h3>
-    <p>{{ course.description }}</p>
-    <p>{{ course.category }} · {{ course.durationHours }} hrs</p>
-    <button (click)="enroll(course)" [disabled]="!userService.currentUser()">Enroll</button>
-  </div>
-} @empty {
-  <p>No courses available.</p>
-}
+<div class="grid">
+  @for (course of courses(); track course.id) {
+    <div class="card">
+      <span class="badge">{{ course.category }}</span>
+      <h3>{{ course.title }}</h3>
+      <p class="muted">{{ course.description }}</p>
+      <p class="muted">⏱ {{ course.durationHours }} hrs</p>
+      <button (click)="enroll(course)" [disabled]="!userService.currentUser()">Enroll</button>
+    </div>
+  } @empty {
+    <p class="muted">No courses available.</p>
+  }
+</div>
