@@ -1,7 +1,8 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user';
 import { CreateUser } from '../models/create-user';
+
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -10,7 +11,7 @@ export class UserService {
 
   readonly users = signal<User[]>([]);
   readonly currentUser = signal<User | null>(null);
-
+  readonly isAdmin = computed(() => this.currentUser()?.role === 'Admin');
   loadUsers(): void {
     this.http.get<User[]>(this.baseUrl).subscribe({
       next: data => this.users.set(data),

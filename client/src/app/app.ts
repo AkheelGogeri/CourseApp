@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { UserService } from './services/user';
 
 @Component({
@@ -10,6 +10,7 @@ import { UserService } from './services/user';
 })
 export class App implements OnInit {
   protected userService = inject(UserService);
+  private router = inject(Router);
   protected readonly title = signal('Course App');
 
   ngOnInit(): void {
@@ -19,5 +20,9 @@ export class App implements OnInit {
   selectUser(id: string): void {
     const user = this.userService.users().find(u => u.id === Number(id)) ?? null;
     this.userService.currentUser.set(user);
+
+    if (!this.userService.isAdmin() && this.router.url.startsWith('/admin')) {
+      this.router.navigate(['/courses']);
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Enrollment } from '../models/enrollment';
+import { Enrollment, EnrollmentStatus } from '../models/enrollment';
 
 @Injectable({ providedIn: 'root' })
 export class EnrollmentService {
@@ -9,5 +9,17 @@ export class EnrollmentService {
 
   enroll(userId: number, courseId: number) {
     return this.http.post<Enrollment>(this.baseUrl, { userId, courseId });
+  }
+
+  getAll() {
+    return this.http.get<Enrollment[]>(this.baseUrl);
+  }
+
+  getForUser(userId: number) {
+    return this.http.get<Enrollment[]>(`${this.baseUrl}/user/${userId}`);
+  }
+
+  updateStatus(id: number, status: EnrollmentStatus) {
+    return this.http.patch<void>(`${this.baseUrl}/${id}/status`, { status });
   }
 }

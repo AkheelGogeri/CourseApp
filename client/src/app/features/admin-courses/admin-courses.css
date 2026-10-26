@@ -1,0 +1,6 @@
+.form-title { margin-bottom: 1rem; }
+.field-wide { grid-column: 1 / -1; }
+.actions { display: flex; gap: 0.75rem; }
+.col-actions { text-align: right; white-space: nowrap; }
+.col-actions button + button { margin-left: 0.5rem; }
+.row-editing { background: var(--primary-soft); }

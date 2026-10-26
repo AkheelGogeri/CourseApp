@@ -4,6 +4,10 @@
   <a routerLink="/register" routerLinkActive="active">Register</a>
   <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
 
+  @if (userService.isAdmin()) {
+    <a routerLink="/admin/courses" routerLinkActive="active">Manage Courses</a>
+  }
+
   <select class="user-select" (change)="selectUser($any($event.target).value)">
     <option value="">-- Select user --</option>
     @for (user of userService.users(); track user.id) {

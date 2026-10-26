@@ -1,0 +1,75 @@
+<h2>Manage Courses</h2>
+
+@if (message(); as m) {
+  <div class="alert" [class.alert-error]="m.type === 'error'">{{ m.text }}</div>
+}
+
+<div class="card">
+  <h3 class="form-title">{{ editingId() === null ? 'Add a new course' : 'Edit course' }}</h3>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="form-grid">
+      <div class="field">
+        <label for="title">Title</label>
+        <input id="title" formControlName="title" placeholder="C# Fundamentals" />
+        @if (form.controls.title.touched && form.controls.title.invalid) {
+          <span class="error">Title is required (max 150 characters)</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="category">Category</label>
+        <input id="category" formControlName="category" placeholder="Technical" />
+        @if (form.controls.category.touched && form.controls.category.invalid) {
+          <span class="error">Category is required</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="durationHours">Duration (hours)</label>
+        <input id="durationHours" type="number" formControlName="durationHours" />
+        @if (form.controls.durationHours.touched && form.controls.durationHours.invalid) {
+          <span class="error">Enter between 1 and 1000 hours</span>
+        }
+      </div>
+
+      <div class="field field-wide">
+        <label for="description">Description</label>
+        <input id="description" formControlName="description" placeholder="Optional" />
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="submit">{{ editingId() === null ? 'Add course' : 'Save changes' }}</button>
+      @if (editingId() !== null) {
+        <button type="button" class="btn-secondary" (click)="cancel()">Cancel</button>
+      }
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr><th>Title</th><th>Category</th><th>Duration</th><th class="col-actions">Actions</th></tr>
+    </thead>
+    <tbody>
+      @for (c of courses(); track c.id) {
+        <tr [class.row-editing]="c.id === editingId()">
+          <td>
+            <strong>{{ c.title }}</strong>
+            <div class="muted">{{ c.description }}</div>
+          </td>
+          <td><span class="badge">{{ c.category }}</span></td>
+          <td>{{ c.durationHours }} hrs</td>
+          <td class="col-actions">
+            <button type="button" class="btn-secondary btn-sm" (click)="edit(c)">Edit</button>
+            <button type="button" class="btn-danger btn-sm" (click)="remove(c)">Delete</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr><td colspan="4" class="muted">No courses yet. Add one above.</td></tr>
+      }
+    </tbody>
+  </table>
+</div>

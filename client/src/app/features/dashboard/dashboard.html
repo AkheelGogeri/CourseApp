@@ -1,1 +1,73 @@
-<p>dashboard works!</p>
+<h2>
+  @if (isAdmin()) {
+    All Enrollments
+  } @else if (userService.currentUser(); as u) {
+    {{ u.name }}'s Progress
+  } @else {
+    Progress Dashboard
+  }
+</h2>
+
+@if (!userService.currentUser()) {
+  <p class="muted">Select a user in the navbar to see progress.</p>
+}
+
+@if (message(); as m) {
+  <div class="alert" [class.alert-error]="m.type === 'error'">{{ m.text }}</div>
+}
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-label">Total</div>
+    <div class="stat-value">{{ stats().total }}</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Not started</div>
+    <div class="stat-value">{{ stats().notStarted }}</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">In progress</div>
+    <div class="stat-value">{{ stats().inProgress }}</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Completion rate</div>
+    <div class="muted">{{ stats().completed }} of {{ stats().total }} completed</div>
+    <div class="stat-value">{{ stats().percent }}%</div>
+    <div class="progress">
+      <div class="progress-bar" [style.width.%]="stats().percent"></div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>User</th><th>Course</th><th>Enrolled</th><th>Completed</th><th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (e of enrollments(); track e.id) {
+        <tr>
+          <td>{{ e.userName }}</td>
+          <td>{{ e.courseTitle }}</td>
+          <td>{{ e.enrolledAt | date: 'mediumDate' }}</td>
+          <td>{{ e.completedAt ? (e.completedAt | date: 'mediumDate') : '—' }}</td>
+          <td>@if (isAdmin()) {
+            <select class="status-select" [attr.data-status]="e.status"
+                    (change)="changeStatus(e, $any($event.target).value)">
+              @for (s of statuses; track s) {
+                <option [value]="s" [selected]="s === e.status">{{ labels[s] }}</option>
+              }
+            </select>
+              } @else {
+                <span class="status-badge" [attr.data-status]="e.status">{{ labels[e.status] }}</span>
+              }
+          </td>
+        </tr>
+      } @empty {
+        <tr><td colspan="5" class="muted">No enrollments yet. Enroll in a course from the catalog.</td></tr>
+      }
+    </tbody>
+  </table>
+</div>
